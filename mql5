@@ -1,0 +1,80 @@
+mql5
+//+------------------------------------------------------------------+
+//|                                               JagzFX Expert ONE |
+//|                        Developer: Forex Robot Easy Team, forexroboteasy.com |
+//+------------------------------------------------------------------+
+
+// Risk Management
+double RiskPercentage = 2; // Risk percentage per trade
+
+// Position Sizing
+double AccountBalance = AccountInfoDouble(ACCOUNT_BALANCE); // Account balance
+double PositionSize = AccountBalance * RiskPercentage / 100; // Position size
+
+// Profit Averaging
+int NumberOfTrades = 0; // Number of trades
+double TotalProfit = 0; // Total profit
+
+// Trailing Stop
+double TrailingStopDistance = 50; // Trailing stop distance in pips
+double StopLossLevel = 0; // Stop loss level
+double TrailingStopLevel = 0; // Trailing stop level
+
+// Weekly and Intraday Sessions
+datetime StartTime = D'08:00'; // Start time for trading
+datetime EndTime = D'16:00'; // End time for trading
+
+// Custom Indicator Channels
+double Channel1 = iCustom(NULL, 0, 'CustomIndicator1'); // Custom indicator 1
+double Channel2 = iCustom(NULL, 0, 'CustomIndicator2'); // Custom indicator 2
+double Channel3 = iCustom(NULL, 0, 'CustomIndicator3'); // Custom indicator 3
+
+// Fast Back-Testing
+void FastBackTesting()
+{
+    // Perform fast back-testing
+}
+
+// Market Volatility
+double MarketVolatility = iCustom(NULL, 0, 'MarketVolatility'); // Market volatility
+
+// Main Expert Advisor Function
+void OnTick()
+{
+    // Check if it's within trading session
+    if (TimeCurrent() >= StartTime && TimeCurrent() <= EndTime)
+    {
+        // Check if custom indicators signal for entry
+        if (Channel1 > 0 && Channel2 > 0 && Channel3 > 0)
+        {
+            // Execute trading logic
+            // ...
+            
+            // Check if trade is profitable
+            if (Profit > 0)
+            {
+                // Update profit averaging
+                NumberOfTrades++;
+                TotalProfit += Profit;
+                
+                // Check if trailing stop is enabled
+                if (TrailingStopDistance > 0)
+                {
+                    // Calculate trailing stop level
+                    StopLossLevel = Bid - TrailingStopDistance * Point;
+                    TrailingStopLevel = Bid - TrailingStopDistance * Point;
+                    
+                    // Update stop loss level if trade moves in favor
+                    if (Bid > TrailingStopLevel)
+                    {
+                        StopLossLevel = TrailingStopLevel;
+                    }
+                }
+            }
+        }
+    }
+}
+
+//+------------------------------------------------------------------+
+//|                                             End of JagzFX Expert ONE |
+//+------------------------------------------------------------------+
